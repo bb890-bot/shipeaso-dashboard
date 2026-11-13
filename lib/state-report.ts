@@ -80,8 +80,8 @@ export async function absorbJsonl(report:Report, url:string, storeName:string, s
 }
 const csv = (v:unknown):string => { const s = String(v ?? ''); return /[",\r\n]/.test(s) ? `"${s.replace(/"/g,'""')}"` : s; };
 export function toCsv(report: Report, format:Format, metric:Metric):string {
-  const states = [...report.rows.keys()].sort((a,b)=>a.localeCompare(b));
-  const products = [...report.products].sort((a,b)=>a.localeCompare(b));
+  const states = Array.from(report.rows.keys()).sort((a,b)=>a.localeCompare(b));
+  const products = Array.from(report.products).sort((a,b)=>a.localeCompare(b));
   const value = (s:string,p:string):number => report.rows.get(s)?.get(p)?.[metric] ?? 0;
   const lines:string[]=[];
   if (format === 'matrix') {
