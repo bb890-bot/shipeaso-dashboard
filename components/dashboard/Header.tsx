@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Store, CheckCircle2, AlertCircle, Settings } from "lucide-react";
 import { ShopifyStoreSummary } from "@/types/shopify";
 
@@ -40,6 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            <Link href="/reports" className="rounded-lg bg-emerald-700 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-800">Export state × product CSV</Link>
             {stores.length > 0 && (
               <label className="relative">
                 <span className="sr-only">Select Shopify store</span>
