@@ -57,6 +57,9 @@ export function getOrdersForPeriod(request: NextRequest, period: OrderPeriod) {
   const range = getOrderPeriodRange(period);
   url.searchParams.set("startDate", range.startDate);
   url.searchParams.set("endDate", range.endDate);
+  if (!url.searchParams.has("refresh")) {
+    url.searchParams.set("refresh", "latest");
+  }
 
   return getOrders(
     new NextRequest(url, {

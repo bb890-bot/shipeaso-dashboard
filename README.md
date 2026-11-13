@@ -93,6 +93,11 @@ The dashboard exposes convenience endpoints for common Asia/Kolkata reporting pe
 
 `this-month` covers the first day of the current month through today.
 
+These three endpoints request an incremental update by default. Upstream Shopify
+refreshes are limited to once per minute per store and date range, while requests
+inside that window reuse the in-memory cache. Pass `refresh=full` only when a
+complete re-sync is required.
+
 The settings form uses Shopify's current **Dev Dashboard client credentials** flow:
 
 1. Open the [Shopify Dev Dashboard](https://dev.shopify.com/dashboard) and select the

@@ -10,6 +10,9 @@ const ORDERS_PER_PAGE = 250;
 const MAX_PAGES = 40;
 const MAX_ORDERS = ORDERS_PER_PAGE * MAX_PAGES;
 const CACHE_TTL_MS = 5 * 60 * 1000;
+// Protect Shopify's GraphQL cost budget when several dashboards or integrations
+// request an incremental refresh at nearly the same time.
+const MIN_INCREMENTAL_REFRESH_MS = 60 * 1000;
 const MAX_CACHE_ENTRIES = 12;
 const NO_STORE_HEADERS = {
   "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
@@ -176,7 +179,10 @@ async function loadStoreRange(
     range = await fetchOrdersForRange(shopifyQuery, storeId);
     writeCache(cacheKey, range);
     syncMode = "full";
-  } else if (refreshMode === "latest") {
+  } else if (
+    refreshMode === "latest" &&
+    Date.now() - range.fetchedAt >= MIN_INCREMENTAL_REFRESH_MS
+  ) {
     range = await refreshLatestOrdersForRange(shopifyQuery, range, storeId);
     writeCache(cacheKey, range);
     syncMode = "incremental";
